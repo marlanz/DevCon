@@ -46,3 +46,11 @@ export async function GET(req: NextRequest) {
     console.error(err);
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    return NextResponse.json({ message: "health check" });
+  } catch (err) {
+    console.error(err);
+  }
+}
