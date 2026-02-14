@@ -54,3 +54,11 @@ export async function DELETE(req: NextRequest) {
     console.error(err);
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    return NextResponse.json({ message: "health check" });
+  } catch (err) {
+    console.error(err);
+  }
+}
