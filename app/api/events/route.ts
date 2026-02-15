@@ -57,7 +57,7 @@ export async function DELETE(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    return NextResponse.json({ message: "health check" });
+    return NextResponse.json({ message: "health check", error: false });
   } catch (err) {
     console.error(err);
   }
