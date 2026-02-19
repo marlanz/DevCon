@@ -1,58 +1,13 @@
 import EventCard, { Props } from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
+import { IEvent } from "@/database";
 
-const events: Props[] = [
-  {
-    image: "/images/event1.png",
-    title: "Next.js Global Summit 2026",
-    slug: "nextjs-global-summit-2026",
-    location: "Singapore",
-    date: "Mar 18, 2026",
-    time: "09:00 AM - 05:00 PM",
-  },
-  {
-    image: "/images/event2.png",
-    title: "React Conf Vietnam",
-    slug: "react-conf-vietnam",
-    location: "Ho Chi Minh City, Vietnam",
-    date: "Apr 10, 2026",
-    time: "08:30 AM - 04:30 PM",
-  },
-  {
-    image: "/images/event3.png",
-    title: "AI & Web Hackathon 48H",
-    slug: "ai-web-hackathon-48h",
-    location: "Hanoi, Vietnam",
-    date: "May 02–03, 2026",
-    time: "All Day",
-  },
-  {
-    image: "/images/event4.png",
-    title: "DevOps Day Asia",
-    slug: "devops-day-asia",
-    location: "Bangkok, Thailand",
-    date: "Jun 14, 2026",
-    time: "10:00 AM - 06:00 PM",
-  },
-  {
-    image: "/images/event5.png",
-    title: "Open Source Contributors Meetup",
-    slug: "open-source-contributors-meetup",
-    location: "Online (Zoom)",
-    date: "Jul 05, 2026",
-    time: "07:00 PM - 09:00 PM",
-  },
-  {
-    image: "/images/event6.png",
-    title: "TypeScript Deep Dive Workshop",
-    slug: "typescript-deep-dive-workshop",
-    location: "Da Nang, Vietnam",
-    date: "Aug 21, 2026",
-    time: "01:00 PM - 05:00 PM",
-  },
-];
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export default function Home() {
+const Home = async () => {
+  const response = await fetch(`${BASE_URL}/api/events`);
+  const { events } = await response.json();
+
   return (
     <section>
       <h1 className="text-center">
@@ -65,13 +20,17 @@ export default function Home() {
       <div className="mt-20 space-y-7">
         <h3>Featured Events</h3>
         <ul className="events">
-          {events.map((event, index) => (
-            <li key={event.title} className="list-none">
-              <EventCard {...event} />
-            </li>
-          ))}
+          {events &&
+            events.length > 0 &&
+            events.map((event: IEvent) => (
+              <li key={event.title} className="list-none">
+                <EventCard {...event} />
+              </li>
+            ))}
         </ul>
       </div>
     </section>
   );
-}
+};
+
+export default Home;

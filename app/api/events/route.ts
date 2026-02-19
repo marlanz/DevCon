@@ -1,6 +1,7 @@
 import { Event } from "@/database";
 import connectDB from "@/lib/mongodb";
 import { v2 } from "cloudinary";
+// import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -63,28 +64,20 @@ export async function POST(req: NextRequest) {
   }
 }
 
-//health check route
-
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    return NextResponse.json({ message: "health check" });
-  } catch (err) {
-    console.error(err);
-  }
-}
+    await connectDB();
 
-export async function DELETE(req: NextRequest) {
-  try {
-    return NextResponse.json({ message: "health check" });
-  } catch (err) {
-    console.error(err);
-  }
-}
+    const events = await Event.find().sort({ createdAt: -1 });
 
-export async function PUT(req: NextRequest) {
-  try {
-    return NextResponse.json({ message: "health check", error: false });
+    return NextResponse.json(
+      { message: "Event fetched successfully", events },
+      { status: 200 },
+    );
   } catch (err) {
-    console.error(err);
+    return NextResponse.json(
+      { message: "Event fetching failed", error: err },
+      { status: 500 },
+    );
   }
 }
