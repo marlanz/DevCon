@@ -1,9 +1,49 @@
-import { IEvent } from "@/database";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import React from "react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const EventDetailItem = ({
+  icon,
+  alt,
+  label,
+}: {
+  icon: string;
+  alt: string;
+  label: string;
+}) => {
+  return (
+    <div className="flex-row-gap-2 items-center">
+      <Image src={icon} alt={label} width={17} height={17} />
+      <p>{label}</p>
+    </div>
+  );
+};
+
+const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => {
+  return (
+    <div className="agenda">
+      <h2>Agenda</h2>
+      <ul>
+        {agendaItems.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const EventTags = ({ tags }: { tags: string[] }) => {
+  return (
+    <div className="flex flex-row gap-1.5 flex-wrap">
+      {tags.map((tag, index) => (
+        <div key={index} className="pill">
+          {tag}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const EventDetailPage = async ({
   params,
@@ -13,7 +53,20 @@ const EventDetailPage = async ({
   const { slug } = await params;
   const response = await fetch(`${BASE_URL}/api/events/${slug}`);
   const {
-    event: { description, title, image },
+    event: {
+      description,
+      title,
+      image,
+      overview,
+      date,
+      time,
+      location,
+      mode,
+      audience,
+      agenda,
+      tags,
+      organizer,
+    },
   } = await response.json();
 
   if (!title) return notFound();
@@ -22,7 +75,7 @@ const EventDetailPage = async ({
     <section id="event">
       <div className="header">
         <h1>Event {title}</h1>
-        <p className="mt-2">{description}</p>
+        <p>{description}</p>
       </div>
 
       <div className="details">
@@ -34,9 +87,39 @@ const EventDetailPage = async ({
             height={800}
             className="banner"
           />
+          <section className="flex-col gap-2 ">
+            <h2>Overview</h2>
+            <p>{overview}</p>
+          </section>
+
+          <section className="flex-col gap-2">
+            <h2>Event Details</h2>
+            <EventDetailItem
+              icon="/icons/calendar.svg"
+              alt="calendar"
+              label={date}
+            />
+            <EventDetailItem icon="/icons/clock.svg" alt="clock" label={time} />
+            <EventDetailItem icon="/icons/pin.svg" alt="pin" label={location} />
+            <EventDetailItem icon="/icons/mode.svg" alt="mode" label={mode} />
+            <EventDetailItem
+              icon="/icons/audience.svg"
+              alt="audience"
+              label={audience}
+            />
+          </section>
+
+          <EventAgenda agendaItems={agenda} />
+
+          <section className="flex-col-gap-2">
+            <h2>About the Organizers</h2>
+            <p>{organizer}</p>
+          </section>
+
+          <EventTags tags={tags} />
         </div>
         <aside className="booking">
-          <p className="text-lg font-semibold">Book Events</p>
+          <p className="text-lg font-semibold">Book Event</p>
         </aside>
       </div>
     </section>
