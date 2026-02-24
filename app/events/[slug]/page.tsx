@@ -112,7 +112,7 @@ const EventDetailPage = async ({
           <EventAgenda agendaItems={agenda} />
 
           <section className="flex-col-gap-2">
-            <h2>About the Organizers</h2>
+            <h2>Abouts the Organizers</h2>
             <p>{organizer}</p>
           </section>
 
