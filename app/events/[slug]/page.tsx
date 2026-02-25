@@ -119,7 +119,7 @@ const EventDetailPage = async ({
           <EventTags tags={tags} />
         </div>
         <aside className="booking">
-          <p className="text-lg font-semibold">Book Event</p>
+          <p className="text-lg font-semibold">Book Events</p>
         </aside>
       </div>
     </section>
