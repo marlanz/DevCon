@@ -1,3 +1,4 @@
+import BookEvent from "@/components/BookEvent";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -50,26 +51,50 @@ const EventDetailPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { slug } = await params;
-  const response = await fetch(`${BASE_URL}/api/events/${slug}`);
-  const {
-    event: {
-      description,
-      title,
-      image,
-      overview,
-      date,
-      time,
-      location,
-      mode,
-      audience,
-      agenda,
-      tags,
-      organizer,
-    },
-  } = await response.json();
+  const slug = await params;
 
-  if (!title) return notFound();
+  let event;
+  try {
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!request.ok) {
+      if (request.status === 404) {
+        return notFound();
+      }
+      throw new Error(`Failed to fetch event: ${request.statusText}`);
+    }
+
+    const response = await request.json();
+    event = response.event;
+
+    if (!event) {
+      return notFound();
+    }
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    return notFound();
+  }
+
+  const {
+    description,
+    image,
+    overview,
+    date,
+    time,
+    location,
+    mode,
+    agenda,
+    audience,
+    tags,
+    organizer,
+    title,
+  } = event;
+
+  if (!description) return notFound();
+
+  const bookings = 10;
 
   return (
     <section id="event">
@@ -119,7 +144,17 @@ const EventDetailPage = async ({
           <EventTags tags={tags} />
         </div>
         <aside className="booking">
-          <p className="text-lg font-semibold">Book Events</p>
+          <div className="signup-card">
+            <h2>Book Your Spot</h2>
+            {bookings > 0 ? (
+              <p className="text-sm">
+                Join {bookings} people who have already booked their spot
+              </p>
+            ) : (
+              <p className="text-sm">Be the first to book your spot</p>
+            )}
+            <BookEvent />
+          </div>
         </aside>
       </div>
     </section>
