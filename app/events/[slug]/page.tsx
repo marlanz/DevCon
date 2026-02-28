@@ -151,7 +151,7 @@ const EventDetailPage = async ({
                 Join {bookings} people who have already booked their spot
               </p>
             ) : (
-              <p className="text-sm">Bes the first to book your spot</p>
+              <p className="text-sm">Besa the first to book your spot</p>
             )}
             <BookEvent />
           </div>
