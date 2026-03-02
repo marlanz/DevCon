@@ -145,7 +145,7 @@ const EventDetailPage = async ({
         </div>
         <aside className="booking">
           <div className="signup-card">
-            <h2>Book Your Spot</h2>
+            <h2>Books Your Spot</h2>
             {bookings > 0 ? (
               <p className="text-sm">
                 Join {bookings} people who have already booked their spot
