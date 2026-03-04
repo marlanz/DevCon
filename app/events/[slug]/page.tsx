@@ -3,6 +3,7 @@ import EventCard from "@/components/EventCard";
 import { IEvent } from "@/database";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.action";
 import { log } from "console";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -55,6 +56,8 @@ const EventDetailPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  "use cache";
+  cacheLife("hours");
   const { slug } = await params;
 
   let event;
@@ -94,6 +97,7 @@ const EventDetailPage = async ({
     tags,
     organizer,
     title,
+    _id,
   } = event;
 
   if (!description) return notFound();
@@ -159,7 +163,7 @@ const EventDetailPage = async ({
             ) : (
               <p className="text-sm">Besa the first to book your spot</p>
             )}
-            <BookEvent />
+            <BookEvent eventId={_id} slug={slug} />
           </div>
         </aside>
       </div>
