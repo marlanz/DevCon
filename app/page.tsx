@@ -8,7 +8,7 @@ const Home = async () => {
   "use cache";
   cacheLife("hours");
   const { success, data } = await getAllEvents();
-  if (!success) return <div>Failed to load data</div>;
+  if (!success) return <div>Failed to load datas</div>;
 
   return (
     <section>
