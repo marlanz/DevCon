@@ -1,8 +1,16 @@
+import { signOutAction } from "@/lib/actions/auth";
+import { auth } from "@/lib/auth";
+import { LogOut } from "lucide-react";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { Button } from "./Button";
 
-const NavBar = () => {
+const NavBar = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   return (
     <header>
       <nav>
@@ -14,6 +22,21 @@ const NavBar = () => {
           <Link href={"/"}>Home</Link>
           <Link href={"/"}>Events</Link>
           <Link href={"/"}>Create Event</Link>
+          {!session ? (
+            <>
+              <Link href={"/signup"}>Register</Link>
+              <Link href={"/signin"}>Sign In</Link>
+            </>
+          ) : (
+            <>
+              <p>Hello {session.user.name ?? session.user.email}</p>
+              <form action={signOutAction}>
+                <Button type="submit">
+                  <LogOut />
+                </Button>
+              </form>
+            </>
+          )}
         </ul>
       </nav>
     </header>
