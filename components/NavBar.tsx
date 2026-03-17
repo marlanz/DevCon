@@ -5,12 +5,9 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./Button";
+import UserInfo from "./UserInfo";
 
 const NavBar = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
   return (
     <header>
       <nav>
@@ -22,21 +19,7 @@ const NavBar = async () => {
           <Link href={"/"}>Home</Link>
           <Link href={"/"}>Events</Link>
           <Link href={"/"}>Create Event</Link>
-          {!session ? (
-            <>
-              <Link href={"/signup"}>Register</Link>
-              <Link href={"/signin"}>Sign In</Link>
-            </>
-          ) : (
-            <>
-              <p>Hello {session.user.name ?? session.user.email}</p>
-              <form action={signOutAction}>
-                <Button type="submit">
-                  <LogOut />
-                </Button>
-              </form>
-            </>
-          )}
+          <UserInfo />
         </ul>
       </nav>
     </header>
