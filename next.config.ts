@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    typedEnv: true,
+  },
 };
 
 export default nextConfig;

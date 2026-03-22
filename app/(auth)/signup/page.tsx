@@ -70,7 +70,7 @@ export default function SignUpPage() {
     );
   }
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4">
+    <div className="flex flex-col items-center justify-center  gap-4">
       <h1 className="text-2xl font-bold">Sign Up</h1>
       <div className="w-full max-w-sm">
         <Form {...form}>

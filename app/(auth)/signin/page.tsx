@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import { SocialAuthButtons } from "@/components/auth/SocialAuthButton";
 import {
   Form,
   FormControl,
@@ -16,7 +17,6 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -57,7 +57,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4">
+    <div className="flex flex-col items-center justify-center  gap-4">
       <h1 className="text-2xl font-bold">Sign In</h1>
       <div className="w-full max-w-sm">
         <Form {...form}>
@@ -93,6 +93,16 @@ export default function SignInPage() {
             </Button>
           </form>
         </Form>
+
+        <div className="mt-6 space-y-4">
+          <div className="relative">
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2  text-white">Or continue with</span>
+            </div>
+          </div>
+
+          <SocialAuthButtons />
+        </div>
       </div>
     </div>
   );
