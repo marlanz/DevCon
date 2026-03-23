@@ -20,17 +20,17 @@ const UserInfo = () => {
           <Link href={"/signin"}>Sign In</Link>
         </ul>
       ) : (
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center max-w-78">
           {avatar && (
             <Image
               src={avatar}
               alt={session.user.name || "User avatar"}
               width={30}
               height={30}
-              className="rounded-full"
+              className="rounded-full shrink-0"
             />
           )}
-          <p>{session.user.name ?? session.user.email}</p>
+          <p className="truncate">{session.user.name ?? session.user.email}</p>
 
           <Button type="submit" onClick={() => authClient.signOut()}>
             <LogOut />
