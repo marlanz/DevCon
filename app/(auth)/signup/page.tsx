@@ -1,7 +1,9 @@
 "use client";
 
+import { SocialAuthButtons } from "@/components/auth/SocialAuthButton";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import { SocialAuthSection } from "@/components/SocialAuthSection";
 import {
   Form,
   FormControl,
@@ -135,6 +137,7 @@ export default function SignUpPage() {
             </Button>
           </form>
         </Form>
+        <SocialAuthSection />
       </div>
     </div>
   );

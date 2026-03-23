@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { SocialAuthButtons } from "@/components/auth/SocialAuthButton";
+import { SocialAuthSection } from "@/components/SocialAuthSection";
 import {
   Form,
   FormControl,
@@ -94,15 +94,7 @@ export default function SignInPage() {
           </form>
         </Form>
 
-        <div className="mt-6 space-y-4">
-          <div className="relative">
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2  text-white">Or continue with</span>
-            </div>
-          </div>
-
-          <SocialAuthButtons />
-        </div>
+        <SocialAuthSection />
       </div>
     </div>
   );
