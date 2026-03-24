@@ -15,7 +15,7 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
     label: "Events",
   },
   {
-    href: "/create",
+    href: "/events/create",
     label: "Create Event",
   },
   {
