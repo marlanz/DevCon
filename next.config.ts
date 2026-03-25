@@ -28,7 +28,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    typedEnv: true,
+    typedEnv: true, //type safe for env variables
+    browserDebugInfoInTerminal: true, //show client side log in terminal
   },
 };
 

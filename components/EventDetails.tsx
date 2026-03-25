@@ -87,80 +87,35 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
     audience,
     tags,
     organizer,
+    title,
   } = event;
 
   if (!description) return notFound();
-
-  const bookings = 10;
 
   const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
 
   return (
     <section id="event">
-      <div className="header">
-        <h1>Event Description</h1>
-        <p>{description}</p>
-      </div>
-
-      <div className="details">
-        {/*    Left Side - Event Content */}
-        <div className="content">
+      <div className="hero relative">
+        <div className="w-full h-140 relative">
           <Image
             src={image}
             alt="Event Banner"
-            width={800}
-            height={800}
-            className="banner"
+            fill
+            className="banner brightness-30"
           />
-
-          <section className="flex-col-gap-2">
-            <h2>Overview</h2>
-            <p>{overview}</p>
-          </section>
-
-          <section className="flex-col-gap-2">
-            <h2>Event Details</h2>
-
-            <EventDetailItem
-              icon="/icons/calendar.svg"
-              alt="calendar"
-              label={date}
-            />
-            <EventDetailItem icon="/icons/clock.svg" alt="clock" label={time} />
-            <EventDetailItem icon="/icons/pin.svg" alt="pin" label={location} />
-            <EventDetailItem icon="/icons/mode.svg" alt="mode" label={mode} />
-            <EventDetailItem
-              icon="/icons/audience.svg"
-              alt="audience"
-              label={audience}
-            />
-          </section>
-
-          <EventAgenda agendaItems={agenda} />
-
-          <section className="flex-col-gap-2">
-            <h2>About the Organizer</h2>
-            <p>{organizer}</p>
-          </section>
-
-          <EventTags tags={tags} />
         </div>
-
-        {/*    Right Side - Booking Form */}
-        <aside className="booking">
-          <div className="signup-card">
-            <h2>Book Your Spot</h2>
-            {bookings > 0 ? (
-              <p className="text-sm">
-                Join {bookings} people who have already booked their spot!
-              </p>
-            ) : (
-              <p className="text-sm">Be the first to book your spot!</p>
-            )}
-
-            <BookEvent eventId={event._id} slug={event.slug} />
+        <div className="hero-tite p-6 absolute bottom-0">
+          <div className="chip-tag mb-4">
+            <div className="rounded-2xl bg-purple-600 font-semibold text-[16px] w-fit px-4 py-1 uppercase">
+              {mode}
+            </div>
           </div>
-        </aside>
+          <p className="text-7xl font-bold">{title}</p>
+          <p className="text-xl font-semibold text-gray-300 mt-4">
+            {description}
+          </p>
+        </div>
       </div>
 
       <div className="flex w-full flex-col gap-4 pt-20">
