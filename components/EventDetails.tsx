@@ -3,53 +3,173 @@ import { notFound } from "next/navigation";
 import { IEvent } from "@/database";
 // import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 import Image from "next/image";
-import BookEvent from "@/components/BookEvent";
+
 import EventCard from "@/components/EventCard";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.action";
+import { Separator } from "./ui/separator";
+import { cn } from "@/lib/utils";
+import { Clock } from "lucide-react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const EventDetailItem = ({
-  icon,
-  alt,
-  label,
+function InformationSection({
+  title,
+  content,
+  style,
 }: {
-  icon: string;
-  alt: string;
-  label: string;
-}) => (
-  <div className="flex-row-gap-2 items-center">
-    <Image src={icon} alt={alt} width={17} height={17} />
-    <p>{label}</p>
-  </div>
-);
+  title: string;
+  content: React.ReactNode;
+  style?: string;
+}) {
+  return (
+    <div className="">
+      <p className={cn("text-blue font-semibold", style)}>{title}</p>
+      <div className="mt-6">{content}</div>
+    </div>
+  );
+}
 
-const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
-  <div className="agenda">
-    <h2>Agenda</h2>
-    <ul>
-      {agendaItems.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
-    </ul>
-  </div>
-);
+function IconInformation({ icon, data }: { icon: string; data: string }) {
+  return (
+    <div>
+      <Clock size={20} color="white" />
+    </div>
+  );
+}
 
-const EventTags = ({ tags }: { tags: string[] }) => (
-  <div className="flex flex-row gap-1.5 flex-wrap">
-    {tags.map((tag) => (
-      <div className="pill" key={tag}>
-        {tag}
+function HeroBanner({
+  image,
+  mode,
+  organizer,
+  title,
+  overview,
+}: {
+  image: string;
+  mode: string;
+  organizer: string;
+  title: string;
+  overview: string;
+}) {
+  return (
+    <div className="">
+      <div className="w-full h-140 relative">
+        <Image
+          src={image}
+          alt="Event Banner"
+          fill
+          className="banner brightness-30"
+        />
       </div>
-    ))}
-  </div>
-);
+      <div className="hero-tite p-6 absolute bottom-0">
+        <div className="chip-tag mb-4 flex gap-2">
+          <div className="rounded-2xl bg-purple-600 font-semibold text-[16px] w-fit px-4 py-1 uppercase">
+            {mode}
+          </div>
+          <div className="rounded-2xl border-white border bg-black-200 font-semibold text-[16px] w-fit px-4 py-1 uppercase text-blue">
+            {organizer}
+          </div>
+        </div>
+        <p className="text-7xl font-bold">{title}</p>
+        <p className="text-xl font-semibold text-gray-300 mt-4">{overview}</p>
+      </div>
+    </div>
+  );
+}
 
-const EventDetails = async ({ params }: { params: Promise<string> }) => {
+function Overview({
+  description,
+  tags,
+}: {
+  description: string;
+  tags: string[];
+}) {
+  return (
+    <div className="p-5 bg-black-100">
+      <p className="text-[16px]">{description}</p>
+      <div className="flex gap-2 mt-4">
+        {tags.map((t, index) => (
+          <div
+            key={index}
+            className="text-black-300 rounded-2xl px-4 py-2 bg-black-200 w-fit"
+          >
+            {t}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EventTimeline({
+  agenda,
+  venue,
+  location,
+}: {
+  agenda: string[];
+  venue: string;
+  location: string;
+}) {
+  const items = agenda.map((a) => {
+    const [time, activity] = a.split("|");
+    return { time, activity };
+  });
+
+  return (
+    <div className="flex flex-col">
+      {items.map((item, index) => {
+        const isLastIndex = index === items.length - 1;
+        return (
+          <div className="" key={index}>
+            <div className="agenda-item flex gap-10 items-start">
+              <p className="text-[16px] text-black-300">{item.time}</p>
+              <div className="agenda-content">
+                <p className="text-xl font-semibold">{item.activity}</p>
+                <p className="text-[16px] text-black-300 mt-2">
+                  {venue} - {location}
+                </p>
+              </div>
+            </div>
+            {!isLastIndex && <Separator className="my-8" />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SimilarEvents({ events }: { events: IEvent[] }) {
+  return (
+    <div className="events">
+      {events.length > 0 &&
+        events.map((similarEvent: IEvent) => (
+          <EventCard key={similarEvent.title} {...similarEvent} />
+        ))}
+    </div>
+  );
+}
+
+function TargetAudience({ targetAudience }: { targetAudience: string }) {
+  const parsedTargetAudience = targetAudience.split(",");
+  return (
+    <div className="flex gap-3">
+      {parsedTargetAudience.map((ta, index) => (
+        <div key={index} className="rounded-xl bg-black-200 px-4 py-2">
+          {ta}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EvenTimeAndLocation({}) {
+  return <></>;
+}
+
+const EventDetails = async ({ slug }: { slug: string }) => {
   "use cache";
   cacheLife("hours");
-  const slug = await params;
+  cacheTag(`event-${slug}`);
 
   let event;
   try {
@@ -88,6 +208,7 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
     tags,
     organizer,
     title,
+    venue,
   } = event;
 
   if (!description) return notFound();
@@ -95,38 +216,48 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
   const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
 
   return (
-    <section id="event">
-      <div className="hero relative">
-        <div className="w-full h-140 relative">
-          <Image
-            src={image}
-            alt="Event Banner"
-            fill
-            className="banner brightness-30"
-          />
-        </div>
-        <div className="hero-tite p-6 absolute bottom-0">
-          <div className="chip-tag mb-4">
-            <div className="rounded-2xl bg-purple-600 font-semibold text-[16px] w-fit px-4 py-1 uppercase">
-              {mode}
-            </div>
-          </div>
-          <p className="text-7xl font-bold">{title}</p>
-          <p className="text-xl font-semibold text-gray-300 mt-4">
-            {description}
-          </p>
-        </div>
-      </div>
+    <section id="event" className="py-16">
+      <section className="hero relative">
+        <HeroBanner
+          image={image}
+          mode={mode}
+          organizer={organizer}
+          title={title}
+          overview={overview}
+        />
+      </section>
 
-      <div className="flex w-full flex-col gap-4 pt-20">
-        <h2>Similar Events</h2>
-        <div className="events">
-          {similarEvents.length > 0 &&
-            similarEvents.map((similarEvent: IEvent) => (
-              <EventCard key={similarEvent.title} {...similarEvent} />
-            ))}
+      <section className="body px-6">
+        <div className="flex w-full justify-between mb-20">
+          <div className="left mt-20 flex flex-col gap-15 ">
+            <InformationSection
+              title="OVERVIEW"
+              content={<Overview description={description} tags={tags} />}
+            />
+            <InformationSection
+              title="SCHEDULE OF EVENTS"
+              content={
+                <EventTimeline
+                  agenda={agenda}
+                  venue={venue}
+                  location={location}
+                />
+              }
+            />
+            <InformationSection
+              title="TARGET OF AUDIENCE"
+              content={<TargetAudience targetAudience={audience} />}
+            />
+          </div>
+          <div className="time-date-price"></div>
         </div>
-      </div>
+
+        <InformationSection
+          title="SIMLAR EVENTS YOU DON'T WANNA MISS!"
+          content={<SimilarEvents events={similarEvents} />}
+          style="text-white text-2xl"
+        />
+      </section>
     </section>
   );
 };

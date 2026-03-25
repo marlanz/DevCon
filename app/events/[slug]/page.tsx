@@ -1,7 +1,12 @@
 import EventDetails from "@/components/EventDetails";
 import { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
+
+type Props = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
 
 function formatSlugToTitle(slug: string) {
   return slug
@@ -10,12 +15,9 @@ function formatSlugToTitle(slug: string) {
     .join(" ");
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const formattedTitle = formatSlugToTitle((await params).slug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const formattedTitle = formatSlugToTitle(slug);
 
   return {
     title: `${formattedTitle} | DevCon`,
@@ -27,14 +29,11 @@ const EventDetailsPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(`event-${(await params).slug}`);
-  const slug = params.then((p) => p.slug);
+  const { slug } = await params;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EventDetails params={slug} />
+      <EventDetails slug={slug} />
     </Suspense>
   );
 };
