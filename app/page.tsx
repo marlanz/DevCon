@@ -2,16 +2,18 @@ import EventCard, { Props } from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import { IEvent } from "@/database";
 import { getAllEvents } from "@/lib/actions/event.action";
+import { cacheTag } from "next/cache";
 import { cacheLife } from "next/cache";
 
 const Home = async () => {
   "use cache";
   cacheLife("hours");
+  cacheTag("events");
   const { success, data } = await getAllEvents();
   if (!success) return <div>Failed to load datas</div>;
 
   return (
-    <section>
+    <section className="p-10">
       <h1 className="text-center">
         The Hub for Every Deva <br /> Event You Cannot Miss
       </h1>

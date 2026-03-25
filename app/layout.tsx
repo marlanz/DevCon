@@ -1,23 +1,18 @@
 import type { Metadata } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  Martian_Mono,
-  Schibsted_Grotesk,
-} from "next/font/google";
 import "./globals.css";
 import LightRays from "@/components/LightRays";
 import NavBar from "@/components/NavBar";
 import { Suspense } from "react";
 import { Providers } from "@/lib/queryClient";
+import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 
-const schibstedGrotesk = Schibsted_Grotesk({
-  variable: "--font-schibsted-grotesk",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
-const martianMono = Martian_Mono({
-  variable: "--font-martian-mono",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -34,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${schibstedGrotesk.variable} ${martianMono.variable} min-h-screen antialiased dark`}
+        className={`${jetbrainsMono.variable} ${geistMono.variable} min-h-screen antialiased dark`}
       >
         <Providers>
           <NavBar />
