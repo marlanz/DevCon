@@ -51,14 +51,17 @@ export async function POST(req: NextRequest) {
 
     const createdEvent = await Event.create({
       ...event,
-      tags: tags,
-      agenda: agenda,
+      joiningFee: Number(event.joiningFee),
+      endTime: event.endTime,
+      tags,
+      agenda,
     });
 
     return NextResponse.json(
       {
         message: "Event created successfully",
-        event: createdEvent,
+        event: event,
+        createdEvent: createdEvent.toObject(),
       },
       { status: 201 },
     );

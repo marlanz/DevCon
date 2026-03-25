@@ -201,6 +201,8 @@ const EventDetails = async ({ slug }: { slug: string }) => {
     overview,
     date,
     time,
+    endTime,
+    joiningFee,
     location,
     mode,
     agenda,
@@ -216,7 +218,7 @@ const EventDetails = async ({ slug }: { slug: string }) => {
   const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
 
   return (
-    <section id="event" className="py-16">
+    <section id="event" className="pb-16">
       <section className="hero relative">
         <HeroBanner
           image={image}
@@ -249,7 +251,12 @@ const EventDetails = async ({ slug }: { slug: string }) => {
               content={<TargetAudience targetAudience={audience} />}
             />
           </div>
-          <div className="time-date-price"></div>
+          <div className="time-date-price">
+            <InformationSection
+              title="DATE & TIME"
+              content={<EvenTimeAndLocation />}
+            />
+          </div>
         </div>
 
         <InformationSection

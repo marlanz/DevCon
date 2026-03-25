@@ -11,6 +11,7 @@ export interface IEvent extends Document {
   location: string;
   date: string;
   time: string;
+  endTime: string;
   mode: string;
   audience: string;
   agenda: string[];
@@ -18,6 +19,7 @@ export interface IEvent extends Document {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
+  joiningFee: number;
 }
 
 const EventSchema = new Schema<IEvent>(
@@ -103,6 +105,16 @@ const EventSchema = new Schema<IEvent>(
         message: "At least one tag is required",
       },
     },
+    joiningFee: {
+      type: Number,
+      required: [true, "Joining fee is required"],
+      min: [0, "Joining fee cannot be negative"],
+    },
+
+    endTime: {
+      type: String,
+      required: [true, "End time is required"],
+    },
   },
   {
     timestamps: true, // Auto-generate createdAt and updatedAt
@@ -123,6 +135,10 @@ EventSchema.pre("save", async function () {
 
   if (event.isModified("time")) {
     event.time = normalizeTime(event.time);
+  }
+
+  if (event.isModified("endTime")) {
+    event.endTime = normalizeTime(event.endTime);
   }
 });
 
