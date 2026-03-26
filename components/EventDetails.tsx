@@ -8,8 +8,9 @@ import EventCard from "@/components/EventCard";
 import { cacheLife, cacheTag } from "next/cache";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.action";
 import { Separator } from "./ui/separator";
-import { cn } from "@/lib/utils";
-import { Clock } from "lucide-react";
+import { cn, formatDate, formatTime } from "@/lib/utils";
+import { IconWithText } from "./IconWithText";
+import { Calendar, Clock, LocateIcon, MapPin } from "lucide-react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -26,14 +27,6 @@ function InformationSection({
     <div className="">
       <p className={cn("text-blue font-semibold", style)}>{title}</p>
       <div className="mt-6">{content}</div>
-    </div>
-  );
-}
-
-function IconInformation({ icon, data }: { icon: string; data: string }) {
-  return (
-    <div>
-      <Clock size={20} color="white" />
     </div>
   );
 }
@@ -85,8 +78,8 @@ function Overview({
   tags: string[];
 }) {
   return (
-    <div className="p-5 bg-black-100">
-      <p className="text-[16px]">{description}</p>
+    <div className="p-5 bg-black-100 rounded-[5px]">
+      <p className="text-[16px] leading-relaxed">{description}</p>
       <div className="flex gap-2 mt-4">
         {tags.map((t, index) => (
           <div
@@ -162,8 +155,60 @@ function TargetAudience({ targetAudience }: { targetAudience: string }) {
   );
 }
 
-function EvenTimeAndLocation({}) {
-  return <></>;
+function Venue({
+  location,
+  venue,
+  image,
+}: {
+  location?: string;
+  venue?: string;
+  image: string;
+}) {
+  return (
+    <div className="flex flex-col gap-4">
+      <IconWithText
+        icon={<MapPin />}
+        text={
+          <div className="gap-2">
+            <p className="text-[18px] font-bold">{venue}</p>
+            <p className="text-[16px] font-semibold text-black-300">
+              {location}
+            </p>
+          </div>
+        }
+      />
+
+      {/* 👇 IMAGE CONTAINER */}
+      <div className="relative w-full h-48 rounded-xl overflow-hidden">
+        <Image src={image} alt="event-image" fill className="object-cover" />
+      </div>
+    </div>
+  );
+}
+
+function EventDate({
+  date,
+  time,
+  endTime,
+}: {
+  date: string;
+  time: string;
+  endTime: string;
+}) {
+  return (
+    <div className="flex flex-col gap-5">
+      <IconWithText
+        icon={<Clock className="text-blue" />}
+        text={formatDate(date)}
+        style="font-bold text-[18px]"
+      />
+      <IconWithText
+        icon={<Calendar className="text-blue" />}
+        text={`${formatTime(time)} - ${formatTime(endTime)}`}
+        style="font-bold text-[18px]"
+      />
+    </div>
+  );
 }
 
 const EventDetails = async ({ slug }: { slug: string }) => {
@@ -230,8 +275,8 @@ const EventDetails = async ({ slug }: { slug: string }) => {
       </section>
 
       <section className="body px-6">
-        <div className="flex w-full justify-between mb-20">
-          <div className="left mt-20 flex flex-col gap-15 ">
+        <div className="flex w-full justify-between mb-20 mt-20 items-start gap-10">
+          <div className="left  flex flex-col gap-15 w-9/12">
             <InformationSection
               title="OVERVIEW"
               content={<Overview description={description} tags={tags} />}
@@ -251,10 +296,19 @@ const EventDetails = async ({ slug }: { slug: string }) => {
               content={<TargetAudience targetAudience={audience} />}
             />
           </div>
-          <div className="time-date-price">
+          <div className="time-date-price w-3/12 p-8 bg-black-100 flex flex-col gap-8">
             <InformationSection
               title="DATE & TIME"
-              content={<EvenTimeAndLocation />}
+              content={<EventDate date={date} time={time} endTime={endTime} />}
+              style="text-black-300"
+            />
+
+            <InformationSection
+              title="VENUE"
+              content={
+                <Venue venue={venue} location={location} image={image} />
+              }
+              style="text-black-300"
             />
           </div>
         </div>
