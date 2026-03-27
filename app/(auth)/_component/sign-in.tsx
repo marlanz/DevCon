@@ -29,7 +29,7 @@ const SignInSchema = z.object({
 
 type SignInForm = z.infer<typeof SignInSchema>;
 
-export default function SignInPage() {
+export default function SignInComponent() {
   const form = useForm<SignInForm>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -57,7 +57,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center  gap-4">
+    <div className="flex flex-col items-center justify-center mt-10 gap-4">
       <h1 className="text-2xl font-bold">Sign In</h1>
       <div className="w-full max-w-sm">
         <Form {...form}>

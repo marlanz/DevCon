@@ -32,7 +32,10 @@ export default function RootLayout({
         className={`${jetbrainsMono.variable} ${geistMono.variable} min-h-screen antialiased dark`}
       >
         <Providers>
-          <NavBar />
+          <div className="flex min-h-screen flex-col">
+            <NavBar />
+            <main>{children}</main>
+          </div>
           <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
             <LightRays
               raysOrigin="top-center"
@@ -46,8 +49,6 @@ export default function RootLayout({
               distortion={0.01}
             />
           </div>
-
-          <main>{children}</main>
         </Providers>
       </body>
     </html>

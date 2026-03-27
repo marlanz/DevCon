@@ -12,7 +12,7 @@ export function IconWithText({
   return (
     <div className="flex items-center gap-3">
       {icon}
-      <p className={cn("text-[16px]", style)}>{text}</p>
+      <div className={cn("text-[16px]", style)}>{text}</div>
     </div>
   );
 }
