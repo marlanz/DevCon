@@ -16,8 +16,8 @@ const UserInfo = () => {
     <div>
       {!session ? (
         <ul>
-          <Link href={"/signup"}>Register</Link>
-          <Link href={"/signin"}>Sign In</Link>
+          <Link href={"/register"}>Register</Link>
+          <Link href={"/login"}>Sign In</Link>
         </ul>
       ) : (
         <div className="flex gap-2 items-center max-w-78">

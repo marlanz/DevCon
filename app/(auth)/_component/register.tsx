@@ -37,7 +37,7 @@ const RegisterSchema = z
 //copy type from schema (avoid dupe)
 type RegisterForm = z.infer<typeof RegisterSchema>;
 
-export default function SignUpPage() {
+export default function SignUpComponent() {
   const form = useForm<RegisterForm>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -72,7 +72,7 @@ export default function SignUpPage() {
     );
   }
   return (
-    <div className="flex flex-col items-center justify-center  gap-4">
+    <div className="flex flex-col items-center justify-center mt-10 gap-4">
       <h1 className="text-2xl font-bold">Sign Up</h1>
       <div className="w-full max-w-sm">
         <Form {...form}>
