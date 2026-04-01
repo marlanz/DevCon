@@ -11,6 +11,7 @@ import { Separator } from "./ui/separator";
 import { cn, formatDate, formatTime } from "@/lib/utils";
 import { IconWithText } from "./IconWithText";
 import { Calendar, Clock, LocateIcon, MapPin } from "lucide-react";
+import { BookingButton } from "@/app/events/_components/BookingButton";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -256,6 +257,7 @@ const EventDetails = async ({ slug }: { slug: string }) => {
     organizer,
     title,
     venue,
+    _id,
   } = event;
 
   if (!description) return notFound();
@@ -310,6 +312,7 @@ const EventDetails = async ({ slug }: { slug: string }) => {
               }
               style="text-black-300"
             />
+            <BookingButton title={title} slug={slug} _id={_id} />
           </div>
         </div>
 
