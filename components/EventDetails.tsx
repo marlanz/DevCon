@@ -280,7 +280,7 @@ const EventDetails = async ({ slug }: { slug: string }) => {
         <div className="flex w-full justify-between mb-20 mt-20 items-start gap-10">
           <div className="left  flex flex-col gap-15 w-9/12">
             <InformationSection
-              title="OVERVIEW"
+              title="OVERVIEWS"
               content={<Overview description={description} tags={tags} />}
             />
             <InformationSection
