@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import LightRays from "@/components/LightRays";
 import NavBar from "@/components/NavBar";
-import { Suspense } from "react";
 import { Providers } from "@/lib/queryClient";
-import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
+import { Geist_Mono, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",

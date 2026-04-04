@@ -11,9 +11,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldGroup } from "@/components/ui/field";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -71,7 +79,7 @@ export function BookingButton({
           onInteractOutside={(e) => e.preventDefault()}
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
-          <DialogHeader>
+          <DialogHeader className="mb-3">
             <DialogTitle className="leading-relaxed text-[20px]">
               Your Journey to {title} Starts Here!
             </DialogTitle>
@@ -79,22 +87,73 @@ export function BookingButton({
               Secure your developer pass at one of the biggest conference
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-            </Field>
-            <Field>
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
-            </Field>
-          </FieldGroup>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button type="submit">Save change</Button>
-          </DialogFooter>
+          <Form {...form}>
+            <form
+              // onSubmit={form.handleSubmit(handleLogin)}
+              className="space-y-6"
+            >
+              <FormField
+                name="fullName"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="workEmail"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Work Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-2 gap-x-4">
+                <FormField
+                  control={form.control}
+                  name="workEmail"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1">
+                      <FormLabel>Job Title</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="workEmail"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1">
+                      <FormLabel>Company Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button type="submit">Save change</Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogContent>
       </form>
     </Dialog>
