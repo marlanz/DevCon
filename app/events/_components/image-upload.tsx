@@ -1,6 +1,6 @@
 "use client";
 
-import axios, { AxiosProgressEvent, CancelTokenSource } from "axios";
+import { Input } from "@/components/ui/input";
 import {
   AudioWaveform,
   File,
@@ -11,14 +11,11 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { Input } from "../ui/input";
-import ProgressBar from "../ui/progress";
-import { ScrollArea } from "../ui/scroll-area";
+
 interface FileUploadProgress {
   progress: number;
   File: File;
-  source: CancelTokenSource | null;
+  //   source: CancelTokenSource | null;
 }
 
 enum FileTypes {
@@ -95,56 +92,56 @@ export default function ImageUpload() {
 
   // feel free to mode all these functions to separate utils
   // here is just for simplicity
-  const onUploadProgress = (
-    progressEvent: AxiosProgressEvent,
-    file: File,
-    cancelSource: CancelTokenSource,
-  ) => {
-    const progress = Math.round(
-      (progressEvent.loaded / (progressEvent.total ?? 0)) * 100,
-    );
+  //   const onUploadProgress = (
+  //     progressEvent: AxiosProgressEvent,
+  //     file: File,
+  //     cancelSource: CancelTokenSource,
+  //   ) => {
+  //     const progress = Math.round(
+  //       (progressEvent.loaded / (progressEvent.total ?? 0)) * 100,
+  //     );
 
-    if (progress === 100) {
-      setUploadedFiles((prevUploadedFiles) => {
-        return [...prevUploadedFiles, file];
-      });
+  //     if (progress === 100) {
+  //       setUploadedFiles((prevUploadedFiles) => {
+  //         return [...prevUploadedFiles, file];
+  //       });
 
-      setFilesToUpload((prevUploadProgress) => {
-        return prevUploadProgress.filter((item) => item.File !== file);
-      });
+  //       setFilesToUpload((prevUploadProgress) => {
+  //         return prevUploadProgress.filter((item) => item.File !== file);
+  //       });
 
-      return;
-    }
+  //       return;
+  //     }
 
-    setFilesToUpload((prevUploadProgress) => {
-      return prevUploadProgress.map((item) => {
-        if (item.File.name === file.name) {
-          return {
-            ...item,
-            progress,
-            source: cancelSource,
-          };
-        } else {
-          return item;
-        }
-      });
-    });
-  };
+  //     setFilesToUpload((prevUploadProgress) => {
+  //       return prevUploadProgress.map((item) => {
+  //         if (item.File.name === file.name) {
+  //           return {
+  //             ...item,
+  //             progress,
+  //             source: cancelSource,
+  //           };
+  //         } else {
+  //           return item;
+  //         }
+  //       });
+  //     });
+  //   };
 
-  const uploadImageToCloudinary = async (
-    formData: FormData,
-    onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
-    cancelSource: CancelTokenSource,
-  ) => {
-    return axios.post(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
-      formData,
-      {
-        onUploadProgress,
-        cancelToken: cancelSource.token,
-      },
-    );
-  };
+  //   const uploadImageToCloudinary = async (
+  //     formData: FormData,
+  //     onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
+  //     cancelSource: CancelTokenSource,
+  //   ) => {
+  //     return axios.post(
+  //       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
+  //       formData,
+  //       {
+  //         onUploadProgress,
+  //         cancelToken: cancelSource.token,
+  //       },
+  //     );
+  //   };
 
   const removeFile = (file: File) => {
     setFilesToUpload((prevUploadProgress) => {
@@ -196,13 +193,13 @@ export default function ImageUpload() {
     // }
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  //   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
     <div>
       <div>
         <label
-          {...getRootProps()}
+          //   {...getRootProps()}
           className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
         >
           <div className=" text-center">
@@ -220,7 +217,7 @@ export default function ImageUpload() {
         </label>
 
         <Input
-          {...getInputProps()}
+          //   {...getInputProps()}
           id="dropzone-file"
           accept="image/png, image/jpeg"
           type="file"
@@ -228,7 +225,7 @@ export default function ImageUpload() {
         />
       </div>
 
-      {filesToUpload.length > 0 && (
+      {/* {filesToUpload.length > 0 && (
         <div>
           <ScrollArea className="h-40">
             <p className="font-medium my-2 mt-6 text-muted-foreground text-sm">
@@ -279,7 +276,7 @@ export default function ImageUpload() {
             </div>
           </ScrollArea>
         </div>
-      )}
+      )} */}
 
       {uploadedFiles.length > 0 && (
         <div>
