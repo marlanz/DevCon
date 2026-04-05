@@ -26,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import z from "zod";
+import ImageUpload from "./image-upload";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -121,7 +122,7 @@ export function BookingButton({
               <div className="grid grid-cols-2 gap-x-4">
                 <FormField
                   control={form.control}
-                  name="workEmail"
+                  name="jobTitle"
                   render={({ field }) => (
                     <FormItem className="space-y-1">
                       <FormLabel>Job Title</FormLabel>
@@ -134,7 +135,7 @@ export function BookingButton({
                 />
                 <FormField
                   control={form.control}
-                  name="workEmail"
+                  name="companyName"
                   render={({ field }) => (
                     <FormItem className="space-y-1">
                       <FormLabel>Company Name</FormLabel>
@@ -146,6 +147,22 @@ export function BookingButton({
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="avatar"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Upload your Avatar</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <DialogFooter>
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
