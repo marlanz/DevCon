@@ -27,6 +27,7 @@ import { useForm } from "react-hook-form";
 
 import z from "zod";
 import ImageUpload from "./image-upload";
+import { useState } from "react";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -34,8 +35,8 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const BookingSchema = z.object({
   fullName: z.string().min(1),
   workEmail: z.email().min(1),
-  jobTitle: z.string().min(1),
-  companyName: z.string().min(1),
+  jobTitle: z.string().min(1, "Please fill in all fields"),
+  companyName: z.string().min(1, "Please fill in all fields"),
   avatar: z
     .instanceof(File)
     .refine((file) => file.size > 0, "Image is required")
@@ -68,15 +69,23 @@ export function BookingButton({
     },
   });
 
-  const { isSubmitting } = form.formState;
+  const [open, setOpen] = useState(false);
+  const { isSubmitting, errors } = form.formState;
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) form.reset();
+      }}
+    >
       <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">Open Dialog</Button>
+        <DialogTrigger asChild className="w-full">
+          <Button variant="outline">Save A Seat Now!</Button>
         </DialogTrigger>
         <DialogContent
-          className=""
+          className="flex flex-col h-[95vh] overflow-y-auto no-scrollbar"
           onInteractOutside={(e) => e.preventDefault()}
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
@@ -119,33 +128,41 @@ export function BookingButton({
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-2 gap-x-4">
-                <FormField
-                  control={form.control}
-                  name="jobTitle"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>Job Title</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="companyName"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-x-4">
+                  <FormField
+                    control={form.control}
+                    name="jobTitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Job Title</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* ✅ Shared error message */}
+                {(errors.jobTitle || errors.companyName) && (
+                  <p className="text-sm text-destructive">
+                    {errors.jobTitle?.message || errors.companyName?.message}
+                  </p>
+                )}
               </div>
               <FormField
                 control={form.control}
@@ -167,7 +184,14 @@ export function BookingButton({
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
-                <Button type="submit">Save change</Button>
+                <Button
+                  type="submit"
+                  onClick={form.handleSubmit((data) => {
+                    console.log(data);
+                  })}
+                >
+                  Save seat
+                </Button>
               </DialogFooter>
             </form>
           </Form>

@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { UploadCloud, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 interface Props {
   value?: File;
