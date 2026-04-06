@@ -11,7 +11,7 @@ import { Separator } from "./ui/separator";
 import { cn, formatDate, formatTime } from "@/lib/utils";
 import { IconWithText } from "./IconWithText";
 import { Calendar, Clock, LocateIcon, MapPin } from "lucide-react";
-import { BookingButton } from "@/app/events/_components/BookingButton";
+import { BookingButton } from "@/app/events/_components/booking-button";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
