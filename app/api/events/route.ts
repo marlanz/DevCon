@@ -1,4 +1,5 @@
 import { Event } from "@/database";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import connectDB from "@/lib/mongodb";
 import { v2 } from "cloudinary";
 // import { error } from "console";
@@ -32,22 +33,22 @@ export async function POST(req: NextRequest) {
     const tags = JSON.parse(formData.get("tags") as string);
     const agenda = JSON.parse(formData.get("agenda") as string);
 
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // const arrayBuffer = await file.arrayBuffer();
+    // const buffer = Buffer.from(arrayBuffer);
 
-    const uploadResult = await new Promise((resolve, reject) => {
-      v2.uploader
-        .upload_stream(
-          { resource_type: "image", folder: "DevEvent" },
-          (error, results) => {
-            if (error) return reject(error);
-            resolve(results);
-          },
-        )
-        .end(buffer);
-    });
+    // const uploadResult = await new Promise((resolve, reject) => {
+    //   v2.uploader
+    //     .upload_stream(
+    //       { resource_type: "image", folder: "DevEvent" },
+    //       (error, results) => {
+    //         if (error) return reject(error);
+    //         resolve(results);
+    //       },
+    //     )
+    //     .end(buffer);
+    // });
 
-    event.image = (uploadResult as { secure_url: string }).secure_url;
+    event.image = await uploadToCloudinary(file);
 
     const createdEvent = await Event.create({
       ...event,

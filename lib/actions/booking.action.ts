@@ -6,11 +6,19 @@ import connectDB from "../mongodb";
 export const createBooking = async ({
   eventId,
   slug,
+  fullName,
   email,
+  jobTitle,
+  companyName,
+  avatarUrl,
 }: {
   eventId: string;
   slug: string;
+  fullName: string;
   email: string;
+  jobTitle: string;
+  companyName: string;
+  avatarUrl: string;
 }) => {
   try {
     await connectDB();
