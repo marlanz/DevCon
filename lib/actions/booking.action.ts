@@ -34,3 +34,5 @@ export const createBooking = async ({
     return { success: false, message: error };
   }
 };
+
+export const getUserBookings = async (userId: string) => {};
