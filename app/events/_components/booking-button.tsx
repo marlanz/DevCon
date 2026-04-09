@@ -27,7 +27,8 @@ import { useForm } from "react-hook-form";
 
 import z from "zod";
 import ImageUpload from "./image-upload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -57,12 +58,14 @@ export function BookingButton({
   title: string;
   slug: string;
   _id: string;
+  email?: string;
 }) {
+  const { data: session } = authClient.useSession();
   const form = useForm<BookingForm>({
     resolver: zodResolver(BookingSchema),
     defaultValues: {
       fullName: "",
-      workEmail: "",
+      workEmail: session ? session.user.email : "",
       jobTitle: "",
       companyName: "",
       avatar: undefined,
@@ -71,6 +74,26 @@ export function BookingButton({
 
   const [open, setOpen] = useState(false);
   const { isSubmitting, errors } = form.formState;
+
+  useEffect(() => {
+    if (session?.user) {
+      form.reset({
+        fullName: "",
+        workEmail: session ? session.user.email : "",
+        jobTitle: "",
+        companyName: "",
+        avatar: undefined,
+      });
+    } else {
+      form.reset({
+        fullName: "",
+        workEmail: "",
+        jobTitle: "",
+        companyName: "",
+        avatar: undefined,
+      });
+    }
+  }, [session]);
 
   return (
     <Dialog

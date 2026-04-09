@@ -5,33 +5,48 @@ import connectDB from "../mongodb";
 
 export const createBooking = async ({
   eventId,
-  slug,
   fullName,
-  email,
+  workEmail,
   jobTitle,
   companyName,
   avatarUrl,
 }: {
   eventId: string;
-  slug: string;
   fullName: string;
-  email: string;
+  workEmail: string;
   jobTitle: string;
   companyName: string;
   avatarUrl: string;
 }) => {
   try {
     await connectDB();
-    const duplicatedEmail = await Booking.findOne({ eventId, email }).lean();
-    if (duplicatedEmail) {
-      return { success: false, message: "This email has been used" };
+    // Check for duplicate booking by event and workEmail
+    const duplicatedBooking = await Booking.findOne({
+      eventId,
+      workEmail,
+    }).lean();
+    if (duplicatedBooking) {
+      return {
+        success: false,
+        message: "This email has already been used for this event.",
+      };
     }
 
-    await Booking.create({ eventId, slug, email });
+    await Booking.create({
+      eventId,
+      fullName,
+      workEmail,
+      jobTitle,
+      companyName,
+      avatarUrl,
+    });
     return { success: true };
   } catch (error) {
     console.log("create booking failed: ", error);
-    return { success: false, message: error };
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : String(error),
+    };
   }
 };
 

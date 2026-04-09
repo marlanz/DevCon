@@ -12,6 +12,8 @@ import { cn, formatDate, formatTime } from "@/lib/utils";
 import { IconWithText } from "./IconWithText";
 import { Calendar, Clock, LocateIcon, MapPin } from "lucide-react";
 import { BookingButton } from "@/app/events/_components/booking-button";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
