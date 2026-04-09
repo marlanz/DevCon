@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "./Button";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const UserInfo = () => {
   const { data: session, isPending: loading } = authClient.useSession();
@@ -15,9 +16,9 @@ const UserInfo = () => {
   return (
     <div>
       {!session ? (
-        <ul>
-          <Link href={"/register"}>Register</Link>
-          <Link href={"/login"}>Sign In</Link>
+        <ul className="flex gap-4">
+          <Link href={`/register`}>Register</Link>
+          <Link href={`/login`}>Sign In</Link>
         </ul>
       ) : (
         <div className="flex gap-2 items-center max-w-78">
@@ -30,9 +31,15 @@ const UserInfo = () => {
               className="rounded-full shrink-0"
             />
           )}
+
           <p className="truncate">{session.user.name ?? session.user.email}</p>
 
-          <Button type="submit" onClick={() => authClient.signOut()}>
+          <Button
+            type="button"
+            onClick={() => {
+              authClient.signOut();
+            }}
+          >
             <LogOut />
           </Button>
         </div>

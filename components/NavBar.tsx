@@ -17,7 +17,9 @@ const NavBar = async () => {
             <NavigationLink />
           </Suspense>
         </div>
-        <UserInfo />
+        <Suspense fallback={<div>Loading...</div>}>
+          <UserInfo />
+        </Suspense>
       </nav>
     </header>
   );
