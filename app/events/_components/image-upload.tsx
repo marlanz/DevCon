@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { UploadCloud, X } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   value?: File;
@@ -12,6 +12,7 @@ interface Props {
 
 export default function ImageUpload({ value, onChange }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -27,7 +28,19 @@ export default function ImageUpload({ value, onChange }: Props) {
     }
   };
 
-  const preview = value ? URL.createObjectURL(value) : null;
+  useEffect(() => {
+    if (!value) {
+      setPreview(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(value);
+    setPreview(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [value]);
 
   return (
     <div>

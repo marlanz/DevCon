@@ -314,7 +314,7 @@ const EventDetails = async ({ slug }: { slug: string }) => {
               }
               style="text-black-300"
             />
-            <BookingButton title={title} slug={slug} _id={_id} />
+            <BookingButton title={title} _id={_id} />
           </div>
         </div>
 
